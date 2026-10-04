@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+/* Warna brand Irysh Labs: navy + silver */
+@theme inline {
+  --color-navy-950: #081633;
+  --color-navy-900: #0b1f45;
+  --color-navy-800: #12295a;
+  --color-navy-700: #1b3a78;
+  --color-silver-50: #f4f6f8;
+  --color-silver-200: #d9dee5;
+  --color-silver-400: #a9b1bc;
+  --color-silver-600: #6b7380;
+  --color-accent: #4c8dff;
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-poppins);
+}
+
+body {
+  background: var(--color-navy-950);
+  color: var(--color-silver-50);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* Teks bergradasi silver, dipakai di judul */
+.text-silver {
+  background: linear-gradient(180deg, #ffffff 0%, #d3d8df 55%, #97a0ab 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Latar grid halus */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
