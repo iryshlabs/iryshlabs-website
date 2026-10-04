@@ -1,8 +1,8 @@
-import { bacaNota, cekTotal } from "@/lib/nota";
+import { bacaNota, cekTotal, AiSibukError } from "@/lib/nota";
 import { redis, limitPerIp, limitGlobal, KEY_STATISTIK } from "@/lib/redis";
 
 export const runtime = "nodejs";
-export const maxDuration = 30; // detik; membaca foto oleh AI butuh beberapa detik
+export const maxDuration = 60; // detik; termasuk waktu coba ulang & pindah ke model cadangan
 
 const MAKS_UKURAN = 4 * 1024 * 1024; // 4 MB (batas body request di Vercel ±4,5 MB)
 const TIPE_DIIZINKAN = ["image/jpeg", "image/png", "image/webp"];
@@ -52,6 +52,12 @@ export async function POST(req: Request) {
     return Response.json({ nota, peringatan, sisa, totalDibaca: total });
   } catch (e) {
     console.error("Gagal membaca nota:", e);
-    return Response.json({ error: "Gagal membaca nota. Coba foto ulang dengan lebih jelas dan terang." }, { status: 502 });
+    if (e instanceof AiSibukError) {
+      return Response.json(
+        { error: "Server AI sedang sangat ramai. Tunggu sekitar 1 menit lalu coba lagi.", sisa },
+        { status: 503 },
+      );
+    }
+    return Response.json({ error: "Gagal membaca nota. Coba foto ulang dengan lebih jelas dan terang.", sisa }, { status: 502 });
   }
 }
