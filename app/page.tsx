@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import DemoScan from "@/components/DemoScan";
 
 // ============================================================
 // GANTI DATA KONTAK DI SINI
@@ -141,9 +142,7 @@ export default function Home() {
           <p className="mt-3 max-w-2xl text-silver-400">
             Upload foto struk belanja Anda dan lihat sendiri hasilnya dalam hitungan detik.
           </p>
-          <div className="mt-8 flex h-48 items-center justify-center rounded-2xl border-2 border-dashed border-silver-400/30 text-silver-400">
-            🚧 Demo segera hadir
-          </div>
+          <DemoScan waLink={WA_LINK} />
         </div>
       </section>
 
