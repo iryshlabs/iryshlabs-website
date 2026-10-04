@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import DemoScan from "@/components/DemoScan";
 
 // ============================================================
 // GANTI DATA KONTAK DI SINI
@@ -8,6 +7,8 @@ const KONTAK = {
   whatsapp: "6285244066036", // format internasional tanpa + dan tanpa 0 di depan
   telegram: "iryshlabs",
   email: "iryshlabs@gmail.com",
+  instagram: "iryshlabs",
+  tiktok: "iryshlabs",
 };
 const WA_LINK = `https://wa.me/${KONTAK.whatsapp}?text=${encodeURIComponent(
   "Halo Irysh Labs, saya mau konsultasi soal bot untuk usaha saya.",
@@ -62,6 +63,67 @@ const FAQ = [
   { t: "Ada biaya bulanan?", j: "Ada, mulai Rp125.000/bulan untuk server, biaya AI, dan perawatan agar bot tetap berjalan." },
 ];
 
+// Link eksternal selalu dibuka di tab baru dengan rel aman (tidak membocorkan akses ke halaman kita)
+const EXT = { target: "_blank", rel: "noopener noreferrer" } as const;
+
+// Ikon sederhana (SVG) untuk tautan media sosial
+const IKON: Record<string, React.ReactNode> = {
+  instagram: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  ),
+  tiktok: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+      <path d="M16.5 3c.4 2.1 1.8 3.6 4 3.8v3.1c-1.5 0-2.9-.4-4-1.2v6.6A5.7 5.7 0 1 1 10.8 9.6v3.2a2.6 2.6 0 1 0 2.6 2.5V3h3.1z" />
+    </svg>
+  ),
+  telegram: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+      <path d="M21.5 4.3 18.4 19c-.2 1-.8 1.3-1.7.8l-4.6-3.4-2.2 2.1c-.3.3-.5.5-1 .5l.3-4.7 8.6-7.8c.4-.3-.1-.5-.6-.2L6.6 13 2 11.6c-1-.3-1-1 .2-1.5L20.2 3.2c.8-.3 1.6.2 1.3 1.1z" />
+    </svg>
+  ),
+  whatsapp: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+      <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z" />
+    </svg>
+  ),
+  email: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
+  ),
+};
+
+const SOSMED = [
+  { nama: "Instagram", ikon: "instagram", url: `https://www.instagram.com/${KONTAK.instagram}/`, label: `@${KONTAK.instagram}` },
+  { nama: "TikTok", ikon: "tiktok", url: `https://www.tiktok.com/@${KONTAK.tiktok}`, label: `@${KONTAK.tiktok}` },
+  { nama: "Telegram", ikon: "telegram", url: `https://t.me/${KONTAK.telegram}`, label: `@${KONTAK.telegram}` },
+  { nama: "WhatsApp", ikon: "whatsapp", url: WA_LINK, label: "Chat WhatsApp" },
+];
+
+function IkonSosmed({ ukuran = "h-10 w-10" }: { ukuran?: string }) {
+  return (
+    <div className="flex gap-3">
+      {SOSMED.map((s) => (
+        <a
+          key={s.nama}
+          href={s.url}
+          {...EXT}
+          aria-label={`${s.nama} Irysh Labs`}
+          title={`${s.nama} ${s.label}`}
+          className={`flex ${ukuran} items-center justify-center rounded-full border border-silver-400/30 text-silver-200 transition hover:border-accent hover:bg-accent/15 hover:text-white`}
+        >
+          {IKON[s.ikon]}
+        </a>
+      ))}
+    </div>
+  );
+}
+
 function Logo({ size = 36 }: { size?: number }) {
   return <img src="/logo-mark.svg" alt="Logo Irysh Labs" width={size} height={size} />;
 }
@@ -78,11 +140,10 @@ export default function Home() {
           </a>
           <div className="hidden items-center gap-8 text-sm text-silver-400 md:flex">
             <a href="#layanan" className="hover:text-white">Layanan</a>
-            <a href="#demo" className="hover:text-white">Coba Bot</a>
             <a href="#harga" className="hover:text-white">Harga</a>
             <a href="#faq" className="hover:text-white">FAQ</a>
           </div>
-          <a href={WA_LINK} target="_blank" className="rounded-full bg-silver-50 px-4 py-2 text-sm font-semibold text-navy-900 hover:bg-white">
+          <a href={WA_LINK} {...EXT} className="rounded-full bg-silver-50 px-4 py-2 text-sm font-semibold text-navy-900 hover:bg-white">
             Konsultasi
           </a>
         </nav>
@@ -106,8 +167,8 @@ export default function Home() {
               fokus kembangkan usaha.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#demo" className="rounded-full bg-accent px-6 py-3 font-semibold text-white hover:brightness-110">
-                Coba Gratis Sekarang
+              <a href={WA_LINK} {...EXT} className="rounded-full bg-accent px-6 py-3 font-semibold text-white hover:brightness-110">
+                Konsultasi Gratis
               </a>
               <a href="#harga" className="rounded-full border border-silver-400/40 px-6 py-3 font-semibold text-silver-50 hover:bg-white/5">
                 Lihat Paket
@@ -131,18 +192,6 @@ export default function Home() {
               <p className="mt-2 text-silver-400">{f.isi}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* ---------------- DEMO (Tahap 2) ---------------- */}
-      <section id="demo" className="mx-auto max-w-6xl px-5 py-20">
-        <div className="rounded-3xl border border-accent/30 bg-gradient-to-br from-navy-800 to-navy-900 p-8 md:p-12">
-          <p className="text-sm font-semibold tracking-widest text-accent">COBA BOT</p>
-          <h2 className="font-display mt-2 text-3xl font-bold text-silver md:text-4xl">Foto nota, AI langsung membacanya</h2>
-          <p className="mt-3 max-w-2xl text-silver-400">
-            Upload foto struk belanja Anda dan lihat sendiri hasilnya dalam hitungan detik.
-          </p>
-          <DemoScan waLink={WA_LINK} />
         </div>
       </section>
 
@@ -174,14 +223,14 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <a href={WA_LINK} target="_blank" className="mt-6 rounded-full border border-silver-400/40 py-2 text-center text-sm font-semibold hover:bg-white/5">
+              <a href={WA_LINK} {...EXT} className="mt-6 rounded-full border border-silver-400/40 py-2 text-center text-sm font-semibold hover:bg-white/5">
                 Pilih {p.nama}
               </a>
             </div>
           ))}
         </div>
         <p className="mt-6 text-sm text-silver-400">
-          Butuh WhatsApp API resmi, integrasi pembayaran, atau dashboard? <a href={WA_LINK} className="text-accent underline">Konsultasikan paket Custom</a>.
+          Butuh WhatsApp API resmi, integrasi pembayaran, atau dashboard? <a href={WA_LINK} {...EXT} className="text-accent underline">Konsultasikan paket Custom</a>.
         </p>
       </section>
 
@@ -216,9 +265,12 @@ export default function Home() {
         <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-gradient-to-r from-navy-800 to-navy-700 p-8 md:flex-row md:items-center md:p-12">
           <div>
             <h2 className="font-display text-2xl font-bold text-silver md:text-3xl">Siap otomatiskan bisnis Anda?</h2>
-            <p className="mt-2 text-silver-400">Konsultasi gratis, tanpa kewajiban.</p>
+            <p className="mt-2 text-silver-400">Konsultasi gratis, tanpa kewajiban. Ikuti juga update & tips kami:</p>
+            <div className="mt-4">
+              <IkonSosmed />
+            </div>
           </div>
-          <a href={WA_LINK} target="_blank" className="rounded-full bg-silver-50 px-6 py-3 font-semibold text-navy-900 hover:bg-white">
+          <a href={WA_LINK} {...EXT} className="rounded-full bg-silver-50 px-6 py-3 font-semibold text-navy-900 hover:bg-white">
             Chat via WhatsApp
           </a>
         </div>
@@ -230,9 +282,12 @@ export default function Home() {
             <Logo size={28} />
             <span>© {new Date().getFullYear()} Irysh Labs</span>
           </div>
-          <div className="flex gap-6">
-            <a href={`https://t.me/${KONTAK.telegram}`} className="hover:text-white">Telegram</a>
-            <a href={`mailto:${KONTAK.email}`} className="hover:text-white">{KONTAK.email}</a>
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
+            <a href={`mailto:${KONTAK.email}`} className="flex items-center gap-2 hover:text-white">
+              {IKON.email}
+              {KONTAK.email}
+            </a>
+            <IkonSosmed ukuran="h-9 w-9" />
           </div>
         </div>
       </footer>
